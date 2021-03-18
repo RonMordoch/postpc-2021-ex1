@@ -14,14 +14,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class EditTitleActivity extends AppCompatActivity {
+public class EditTitleActivity extends AppCompatActivity
+{
 
     private boolean isEditing = false;
     // in onCreate() set `this.isEditing` to `true` once the user starts editing, set to `false` once done editing
     // in onBackPressed() check `if(this.isEditing)` to understand what to do
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_title);
 
@@ -54,8 +56,8 @@ public class EditTitleActivity extends AppCompatActivity {
       to complete (1.) & (2.), start by just changing visibility. only add animations after everything else is ready
        */
             this.isEditing = true;
-            fabStartEdit.setVisibility(View.GONE); // TODO animate
-            fabEditDone.setVisibility(View.VISIBLE); // TODO animate
+            this.fadeOutAnimation(fabStartEdit);
+            this.fadeInAnimation(fabEditDone);
             textViewTitle.setVisibility(View.GONE);
             editTextTitle.setVisibility(View.VISIBLE);
             this.showSoftKeyboard(editTextTitle);
@@ -75,8 +77,8 @@ public class EditTitleActivity extends AppCompatActivity {
       to complete (1.) & (2.), start by just changing visibility. only add animations after everything else is ready
        */
             this.isEditing = false;
-            fabEditDone.setVisibility(View.GONE); // TODO animate
-            fabStartEdit.setVisibility(View.VISIBLE); // TODO animate
+            this.fadeOutAnimation(fabEditDone);
+            this.fadeInAnimation(fabStartEdit);
             textViewTitle.setText(editTextTitle.getText());
             textViewTitle.setVisibility(View.VISIBLE);
             editTextTitle.setVisibility(View.GONE);
@@ -85,7 +87,8 @@ public class EditTitleActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed()
+    {
         // BACK button was clicked
     /*
     TODO:
@@ -112,9 +115,8 @@ public class EditTitleActivity extends AppCompatActivity {
             this.isEditing = false;
             editTextTitle.setVisibility(View.GONE);
             textViewTitle.setVisibility(View.VISIBLE);
-            fabEditDone.setVisibility(View.GONE); // TODO animate
-            fabStartEdit.setVisibility(View.VISIBLE); // TODO animate
-
+            this.fadeOutAnimation(fabEditDone);
+            this.fadeInAnimation(fabStartEdit);
         }
         else
         {
@@ -122,16 +124,46 @@ public class EditTitleActivity extends AppCompatActivity {
         }
     }
 
-    public void showSoftKeyboard(View view) {
-        if (view.requestFocus()) {
+    public void showSoftKeyboard(View view)
+    {
+        if (view.requestFocus())
+        {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
         }
     }
 
-    public void hideSoftKeyboard(View view) {
+    public void hideSoftKeyboard(View view)
+    {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public void fadeInAnimation(View view)
+    {
+        view.setVisibility(View.VISIBLE);
+        view.setAlpha(0f);
+        view.animate()
+                .alpha(1f)
+                .setDuration(400L)
+                .start();
+    }
+
+    public void fadeOutAnimation(View view)
+    {
+        view.animate()
+                .alpha(0f)
+                .setStartDelay(100L)
+                .setDuration(400L)
+                .withEndAction(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        view.setVisibility(View.INVISIBLE);
+                    }
+                })
+                .start();
     }
 
 }
