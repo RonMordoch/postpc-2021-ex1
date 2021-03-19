@@ -43,45 +43,31 @@ public class EditTitleActivity extends AppCompatActivity
 
         // handle clicks on "start edit"
         fabStartEdit.setOnClickListener(v -> {
-      /*
-      TODO:
-      1. animate out the "start edit" FAB
-      2. animate in the "done edit" FAB
-      3. hide the static title (text-view)
-      4. show the editable title (edit-text)
-      5. make sure the editable title's text is the same as the static one
-      6. optional (HARD!) make the keyboard to open with the edit-text focused,
-          so the user can start typing without the need another click on the edit-text
-
-      to complete (1.) & (2.), start by just changing visibility. only add animations after everything else is ready
-       */
             this.isEditing = true;
+            // animate out the "start edit" FAB and animate in the "done edit" FAB
             this.fadeOutAnimation(fabStartEdit);
             this.fadeInAnimation(fabEditDone);
+            // hide the static title and show the editable title
             textViewTitle.setVisibility(View.GONE);
             editTextTitle.setVisibility(View.VISIBLE);
+            // make sure the editable title's text is the same as the static one
+            editTextTitle.setText(textViewTitle.getText());
+            // make the keyboard to open with the edit-text focused
             this.showSoftKeyboard(editTextTitle);
         });
 
         // handle clicks on "done edit"
         fabEditDone.setOnClickListener(v -> {
-      /*
-      TODO:
-      1. animate out the "done edit" FAB
-      2. animate in the "start edit" FAB
-      3. take the text from the user's input in the edit-text and put it inside the static text-view
-      4. show the static title (text-view)
-      5. hide the editable title (edit-text)
-      6. make sure that the keyboard is closed
-
-      to complete (1.) & (2.), start by just changing visibility. only add animations after everything else is ready
-       */
             this.isEditing = false;
+            // animate out the "done edit" FAB and animate in the "start edit" FAB
             this.fadeOutAnimation(fabEditDone);
             this.fadeInAnimation(fabStartEdit);
+            // set the user's input txt from the edit-text as the static text-view text
             textViewTitle.setText(editTextTitle.getText());
+            // show the static title (text-view) and hide the editable title (edit-text)
             textViewTitle.setVisibility(View.VISIBLE);
             editTextTitle.setVisibility(View.GONE);
+            // close the keyboard
             this.hideSoftKeyboard(editTextTitle);
         });
     }
@@ -90,21 +76,6 @@ public class EditTitleActivity extends AppCompatActivity
     public void onBackPressed()
     {
         // BACK button was clicked
-    /*
-    TODO:
-    if user is now editing, tap on BACK will revert the edit. do the following:
-    1. hide the edit-text
-    2. show the static text-view with previous text (discard user's input)
-    3. animate out the "done-edit" FAB
-    4. animate in the "start-edit" FAB
-
-    else, the user isn't editing. continue normal BACK tap behavior to exit the screen.
-    call `super.onBackPressed()`
-
-    notice:
-    to work with views, you will need to find them first.
-    to find views call `findViewById()` in a same way like in `onCreate()`
-     */
         FloatingActionButton fabStartEdit = findViewById(R.id.fab_start_edit);
         FloatingActionButton fabEditDone = findViewById(R.id.fab_edit_done);
         TextView textViewTitle = findViewById(R.id.textViewPageTitle);
@@ -113,16 +84,18 @@ public class EditTitleActivity extends AppCompatActivity
         if (this.isEditing)
         {
             this.isEditing = false;
-            editTextTitle.setVisibility(View.GONE);
-            textViewTitle.setVisibility(View.VISIBLE);
+            editTextTitle.setVisibility(View.GONE); // hide the edit-text
+            textViewTitle.setVisibility(View.VISIBLE); // show the static text-view with previous text
+            // animate out the "done-edit" FAB and animate in the "start-edit" FAB
             this.fadeOutAnimation(fabEditDone);
             this.fadeInAnimation(fabStartEdit);
         }
-        else
+        else // exit screen
         {
             super.onBackPressed();
         }
     }
+
 
     public void showSoftKeyboard(View view)
     {
@@ -138,6 +111,7 @@ public class EditTitleActivity extends AppCompatActivity
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
+
 
     public void fadeInAnimation(View view)
     {
