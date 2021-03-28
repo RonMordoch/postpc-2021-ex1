@@ -1,5 +1,6 @@
 package android.exercise.mini.interactions;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,9 +19,11 @@ public class EditTitleActivity extends AppCompatActivity
 {
 
     private boolean isEditing = false;
-    // in onCreate() set `this.isEditing` to `true` once the user starts editing, set to `false` once done editing
-    // in onBackPressed() check `if(this.isEditing)` to understand what to do
+    private FloatingActionButton fabStartEdit, fabEditDone;
+    private TextView textViewTitle;
+    private EditText editTextTitle;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -28,10 +31,10 @@ public class EditTitleActivity extends AppCompatActivity
         setContentView(R.layout.activity_edit_title);
 
         // find all views
-        FloatingActionButton fabStartEdit = findViewById(R.id.fab_start_edit);
-        FloatingActionButton fabEditDone = findViewById(R.id.fab_edit_done);
-        TextView textViewTitle = findViewById(R.id.textViewPageTitle);
-        EditText editTextTitle = findViewById(R.id.editTextPageTitle);
+        fabStartEdit = findViewById(R.id.fab_start_edit);
+        fabEditDone = findViewById(R.id.fab_edit_done);
+        textViewTitle = findViewById(R.id.textViewPageTitle);
+        editTextTitle = findViewById(R.id.editTextPageTitle);
 
         // setup - start from static title with "edit" button
         fabStartEdit.setVisibility(View.VISIBLE);
@@ -43,32 +46,32 @@ public class EditTitleActivity extends AppCompatActivity
 
         // handle clicks on "start edit"
         fabStartEdit.setOnClickListener(v -> {
-            this.isEditing = true;
+            isEditing = true;
             // animate out the "start edit" FAB and animate in the "done edit" FAB
-            this.fadeOutAnimation(fabStartEdit);
-            this.fadeInAnimation(fabEditDone);
+            fadeOutAnimation(fabStartEdit);
+            fadeInAnimation(fabEditDone);
             // hide the static title and show the editable title
             textViewTitle.setVisibility(View.GONE);
             editTextTitle.setVisibility(View.VISIBLE);
             // make sure the editable title's text is the same as the static one
             editTextTitle.setText(textViewTitle.getText());
             // make the keyboard to open with the edit-text focused
-            this.showSoftKeyboard(editTextTitle);
+            showSoftKeyboard(editTextTitle);
         });
 
         // handle clicks on "done edit"
         fabEditDone.setOnClickListener(v -> {
-            this.isEditing = false;
+            isEditing = false;
             // animate out the "done edit" FAB and animate in the "start edit" FAB
-            this.fadeOutAnimation(fabEditDone);
-            this.fadeInAnimation(fabStartEdit);
+            fadeOutAnimation(fabEditDone);
+            fadeInAnimation(fabStartEdit);
             // set the user's input txt from the edit-text as the static text-view text
             textViewTitle.setText(editTextTitle.getText());
             // show the static title (text-view) and hide the editable title (edit-text)
             textViewTitle.setVisibility(View.VISIBLE);
             editTextTitle.setVisibility(View.GONE);
             // close the keyboard
-            this.hideSoftKeyboard(editTextTitle);
+            hideSoftKeyboard(editTextTitle);
         });
     }
 
@@ -76,19 +79,15 @@ public class EditTitleActivity extends AppCompatActivity
     public void onBackPressed()
     {
         // BACK button was clicked
-        FloatingActionButton fabStartEdit = findViewById(R.id.fab_start_edit);
-        FloatingActionButton fabEditDone = findViewById(R.id.fab_edit_done);
-        TextView textViewTitle = findViewById(R.id.textViewPageTitle);
-        EditText editTextTitle = findViewById(R.id.editTextPageTitle);
 
-        if (this.isEditing)
+        if (isEditing)
         {
-            this.isEditing = false;
+            isEditing = false;
             editTextTitle.setVisibility(View.GONE); // hide the edit-text
             textViewTitle.setVisibility(View.VISIBLE); // show the static text-view with previous text
             // animate out the "done-edit" FAB and animate in the "start-edit" FAB
-            this.fadeOutAnimation(fabEditDone);
-            this.fadeInAnimation(fabStartEdit);
+            fadeOutAnimation(fabEditDone);
+            fadeInAnimation(fabStartEdit);
         }
         else // exit screen
         {
@@ -129,15 +128,9 @@ public class EditTitleActivity extends AppCompatActivity
                 .alpha(0f)
                 .setStartDelay(100L)
                 .setDuration(400L)
-                .withEndAction(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        view.setVisibility(View.INVISIBLE);
-                    }
-                })
-                .start();
+                .withEndAction(
+                        () -> view.setVisibility(View.INVISIBLE)
+                ).start();
     }
 
 }

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MiniInteractions</string>
+    <string name="insert_new_title">Insert new title</string>
+    <string name="page_title_here">Page title here</string>
 </resources>
