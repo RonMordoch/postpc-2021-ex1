@@ -23,7 +23,6 @@ public class EditTitleActivity extends AppCompatActivity
     private TextView textViewTitle;
     private EditText editTextTitle;
 
-    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -39,9 +38,9 @@ public class EditTitleActivity extends AppCompatActivity
         // setup - start from static title with "edit" button
         fabStartEdit.setVisibility(View.VISIBLE);
         fabEditDone.setVisibility(View.GONE);
-        textViewTitle.setText("Page title here");
+        textViewTitle.setText(R.string.page_title_here);
         textViewTitle.setVisibility(View.VISIBLE);
-        editTextTitle.setText("Page title here");
+        editTextTitle.setText(R.string.page_title_here);
         editTextTitle.setVisibility(View.GONE);
 
         // handle clicks on "start edit"
@@ -128,9 +127,10 @@ public class EditTitleActivity extends AppCompatActivity
                 .alpha(0f)
                 .setStartDelay(100L)
                 .setDuration(400L)
-                .withEndAction(
-                        () -> view.setVisibility(View.INVISIBLE)
-                ).start();
+                .withEndAction
+                    (
+                    () -> view.setVisibility(View.INVISIBLE)
+                    ).start();
     }
 
 }
